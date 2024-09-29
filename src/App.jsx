@@ -4,18 +4,25 @@ import ProjectSidebar from "./components/ProjectSidebar";
 import NoProjectSelected from "./components/NoProjectSelected";
 
 function App() {
-  const [selectedProject, setSelectedProject] = useState(null); // State to track if a project is selected
+  const [selectedProject, setSelectedProject] = useState(null); // State to track selected project
+  const [isCreatingNewProject, setIsCreatingNewProject] = useState(false); // State to track if we're creating a new project
 
   return (
     <main className="flex h-screen">
       <ProjectSidebar 
-        onSelectProject={(project) => setSelectedProject(project)} // Simulate project selection from the sidebar
+        onAddProject={() => setIsCreatingNewProject(true)} // Trigger new project creation
+        onSelectProject={(project) => {
+          setSelectedProject(project);
+          setIsCreatingNewProject(false); // Reset new project creation if a project is selected
+        }}
       />
       <div className="flex-1 p-6">
-        {selectedProject ? (
-          <NewProject project={selectedProject} />
+        {isCreatingNewProject ? (
+          <NewProject />  // Render NewProject component when creating a project
+        ) : selectedProject ? (
+          <NewProject project={selectedProject} />  // Render the selected project
         ) : (
-          <NoProjectSelected />
+          <NoProjectSelected /> // Render the "No Project Selected" screen
         )}
       </div>
     </main>
@@ -23,4 +30,3 @@ function App() {
 }
 
 export default App;
-
