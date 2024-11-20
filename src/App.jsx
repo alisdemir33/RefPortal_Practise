@@ -4,26 +4,55 @@ import ProjectSidebar from "./components/ProjectSidebar";
 import NoProjectSelected from "./components/NoProjectSelected";
 
 function App() {
-  const [selectedProject, setSelectedProject] = useState(null); // State to track selected project
-  const [isCreatingNewProject, setIsCreatingNewProject] = useState(false); // State to track if we're creating a new project
+
+  const [projectState, setProjectState] = useState({
+    selectedProjectId: undefined,
+    projects: []
+  });
+
+  function handleStartAddProject() {
+    setProjectState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: null,
+      }
+    })
+  }
+
+  function handleAddProject(projectData) {
+    let newid= Math.random();
+    const newProject = { ...projectData, newid }
+    setProjectState(prevState => {
+      return {
+        ...prevState,
+        selectedProjectId:undefined,
+        projects: [...prevState.projects, newProject]
+      }
+
+    });
+  }
+
+  console.log(projectState);
+
+  let content;
+  if (projectState.selectedProjectId === null) {//
+    content = <NewProject onAdd={handleAddProject}></NewProject>
+  } else if (projectState.selectedProjectId === undefined) {
+    content = <NoProjectSelected onStartAddProject={handleStartAddProject}></NoProjectSelected>
+  }
+
 
   return (
     <main className="flex h-screen">
-      <ProjectSidebar 
-        onAddProject={() => setIsCreatingNewProject(true)} // Trigger new project creation
+      <ProjectSidebar
+        projects={projectState.projects}
+        onStartAddProject={handleStartAddProject} // Trigger new project creation
         onSelectProject={(project) => {
-          setSelectedProject(project);
-          setIsCreatingNewProject(false); // Reset new project creation if a project is selected
+          setSelectedProject(project);          
         }}
       />
       <div className="flex-1 p-6">
-        {isCreatingNewProject ? (
-          <NewProject />  // Render NewProject component when creating a project
-        ) : selectedProject ? (
-          <NewProject project={selectedProject} />  // Render the selected project
-        ) : (
-          <NoProjectSelected /> // Render the "No Project Selected" screen
-        )}
+        {content}
       </div>
     </main>
   );
