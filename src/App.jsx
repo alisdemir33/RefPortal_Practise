@@ -20,23 +20,33 @@ function App() {
   }
 
   function handleAddProject(projectData) {
-    let newid= Math.random();
+    let newid = Math.random();
     const newProject = { ...projectData, newid }
     setProjectState(prevState => {
       return {
         ...prevState,
-        selectedProjectId:undefined,
+        selectedProjectId: undefined,
         projects: [...prevState.projects, newProject]
       }
 
     });
   }
 
+  function handleCancelAddProject() {
+    setProjectState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: undefined,
+      }
+    })
+  }
+
+
   console.log(projectState);
 
   let content;
   if (projectState.selectedProjectId === null) {//
-    content = <NewProject onAdd={handleAddProject}></NewProject>
+    content = <NewProject onCancelAdd={handleCancelAddProject} onAdd={handleAddProject}></NewProject>
   } else if (projectState.selectedProjectId === undefined) {
     content = <NoProjectSelected onStartAddProject={handleStartAddProject}></NoProjectSelected>
   }
@@ -48,7 +58,7 @@ function App() {
         projects={projectState.projects}
         onStartAddProject={handleStartAddProject} // Trigger new project creation
         onSelectProject={(project) => {
-          setSelectedProject(project);          
+          setSelectedProject(project);
         }}
       />
       <div className="flex-1 p-6">
