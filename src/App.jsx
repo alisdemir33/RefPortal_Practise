@@ -2,6 +2,7 @@ import { useState } from "react";
 import NewProject from "./components/NewProject";
 import ProjectSidebar from "./components/ProjectSidebar";
 import NoProjectSelected from "./components/NoProjectSelected";
+import SelectedProject from "./components/SelectedProject"
 
 function App() {
 
@@ -20,8 +21,8 @@ function App() {
   }
 
   function handleAddProject(projectData) {
-    let newid= Math.random();
-    const newProject = { ...projectData, newid }
+    let id= Math.random();
+    const newProject = { ...projectData, id }
     setProjectState(prevState => {
       return {
         ...prevState,
@@ -32,6 +33,21 @@ function App() {
     });
   }
 
+  function handleSelectProject(projectId) {
+    debugger;
+    setProjectState((prevState) => ({
+      ...prevState,
+      selectedProjectId: projectId,
+    }));
+  }
+
+  function handleCloseDetails() {
+    setProjectState((prevState) => ({
+      ...prevState,
+      selectedProjectId: undefined,
+    }));
+  }
+
   console.log(projectState);
 
   let content;
@@ -40,16 +56,24 @@ function App() {
   } else if (projectState.selectedProjectId === undefined) {
     content = <NoProjectSelected onStartAddProject={handleStartAddProject}></NoProjectSelected>
   }
-
+  else {
+    const selectedProject = projectState.projects.find(
+      (project) => project.id === projectState.selectedProjectId
+    );
+    content = (
+      <SelectedProject project={selectedProject} onClose={handleCloseDetails} />
+    );
+  }
 
   return (
     <main className="flex h-screen">
       <ProjectSidebar
         projects={projectState.projects}
         onStartAddProject={handleStartAddProject} // Trigger new project creation
-        onSelectProject={(project) => {
+        /* onSelectProject={(project) => {
           setSelectedProject(project);          
-        }}
+        }} */
+          onSelectProject={handleSelectProject} // Select project to view details
       />
       <div className="flex-1 p-6">
         {content}
