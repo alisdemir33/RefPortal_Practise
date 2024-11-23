@@ -2,6 +2,7 @@ import { useState } from "react";
 import NewProject from "./components/NewProject";
 import ProjectSidebar from "./components/ProjectSidebar";
 import NoProjectSelected from "./components/NoProjectSelected";
+import SelectedProject from "./components/SelectedProject";
 
 function App() {
 
@@ -9,6 +10,15 @@ function App() {
     selectedProjectId: undefined,
     projects: []
   });
+
+  function handleSelectProject(id){
+    setProjectState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: id,
+      }
+    })
+  }
 
   function handleStartAddProject() {
     setProjectState((prevState) => {
@@ -20,8 +30,8 @@ function App() {
   }
 
   function handleAddProject(projectData) {
-    let newid = Math.random();
-    const newProject = { ...projectData, newid }
+    let id = Math.floor(Math.random() * 10000);
+    const newProject = { ...projectData, id }
     setProjectState(prevState => {
       return {
         ...prevState,
@@ -44,7 +54,10 @@ function App() {
 
   console.log(projectState);
 
-  let content;
+  const selectedProject=projectState.projects.find((project)=> projectState.selectedProjectId===project.id)
+
+  let content=<SelectedProject project={selectedProject}></SelectedProject>;
+  
   if (projectState.selectedProjectId === null) {//
     content = <NewProject onCancelAdd={handleCancelAddProject} onAdd={handleAddProject}></NewProject>
   } else if (projectState.selectedProjectId === undefined) {
@@ -57,9 +70,8 @@ function App() {
       <ProjectSidebar
         projects={projectState.projects}
         onStartAddProject={handleStartAddProject} // Trigger new project creation
-        onSelectProject={(project) => {
-          setSelectedProject(project);
-        }}
+        onSelectProject={handleSelectProject} 
+        selectedProjectId={projectState.selectedProjectId}       
       />
       <div className="flex-1 p-6">
         {content}
