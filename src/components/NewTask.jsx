@@ -14,8 +14,6 @@ export default function NewTask({ onAddNewTask }) {
         return;
     }
 
-}
-
 return <div className="flex items-center gap-4">
     <input
         onChange={handleChange}

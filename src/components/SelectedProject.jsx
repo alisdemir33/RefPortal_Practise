@@ -1,5 +1,7 @@
 import Tasks from "./Tasks";
 export default function SelectedProject({tasks,project, onDelete,onDeleteTask,onAddTask}) {
+debugger;
+let tasksOfProject=tasks.filter( (task)=> task.projectId===project.id);
 
     const formattedDate= new Date(project.dueDate).toLocaleDateString('en-US',{
         year:"numeric",
@@ -17,6 +19,6 @@ export default function SelectedProject({tasks,project, onDelete,onDeleteTask,on
         <p className="text-stone-600 whitespace-pre-wrap">{project.description}</p>
 
         </header>
-        <Tasks tasks={tasks} onAdd={onAddTask} onDelete={onDeleteTask}></Tasks>
+        <Tasks tasks={tasksOfProject} onAdd={onAddTask} onDelete={onDeleteTask}></Tasks>
     </div>
 }
