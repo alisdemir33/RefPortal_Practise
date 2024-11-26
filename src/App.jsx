@@ -83,8 +83,14 @@ function App() {
 
   }
 
-  function handleDeleteTask(){
-    
+  function handleDeleteTask(id){
+    setProjectState((prevState) => {
+      let newList= prevState.tasks.filter((task)=>task.id!==id);  
+        return {  
+          ...prevState,    
+         tasks:newList
+        }
+      })
   }
 
 
