@@ -33,8 +33,6 @@ function App() {
     })
   }
 
-
-
   function handleStartAddProject() {
     setProjectState((prevState) => {
       return {
@@ -66,19 +64,16 @@ function App() {
     })
   }
 
-  function handleAddTask(text){
-   
+  function handleAddTask(text){   
     
     setProjectState(prevState => {
       let taskid = Math.floor(Math.random() * 10000);
       const newTask = { text:text,id : taskid, projectId:prevState.selectedProjectId }
 
       return {
-        ...prevState,
-       
+        ...prevState,       
         tasks: [newTask, ...prevState.tasks]
       }
-
     });
 
   }
@@ -92,9 +87,6 @@ function App() {
         }
       })
   }
-
-
-  console.log(projectState);
 
   const selectedProject=projectState.projects.find((project)=> projectState.selectedProjectId===project.id)
 
