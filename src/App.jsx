@@ -1,26 +1,32 @@
-import { useState } from "react";
-import NewProject from "./components/NewProject";
-import ProjectSidebar from "./components/ProjectSidebar";
-import NoProjectSelected from "./components/NoProjectSelected";
+import React, { useReducer } from "react";  
+export function counterReducer(state, action) {
+  switch (action.type) {
+    case "INCREMENT":
+      return {count : state.count + 1};
+    case "DECREMENT":
+      return {count:state.count - 1};
+    case "RESET":
+      return {count:0};
+    default:
+      throw new Error(`Unknown action type: ${action.type}`);
+  }
+}
 
 function App() {
-  const [selectedProject, setSelectedProject] = useState(null); // State to track if a project is selected
-
+    const [counter, dispatch] = useReducer(counterReducer, {count:0});
   return (
-    <main className="flex h-screen">
-      <ProjectSidebar 
-        onSelectProject={(project) => setSelectedProject(project)} // Simulate project selection from the sidebar
-      />
-      <div className="flex-1 p-6">
-        {selectedProject ? (
-          <NewProject project={selectedProject} />
-        ) : (
-          <NoProjectSelected />
-        )}
-      </div>
-    </main>
+    <div id="app">
+      <h1>The (Final?) Counter</h1>
+      <p id="actions">
+        <button onClick={() => dispatch({ type: "INCREMENT" })}>Increment</button>
+        <button onClick={() => dispatch({ type: "DECREMENT" })}>Decrement</button>
+        <button onClick={() => dispatch({ type: "RESET" })}>Reset</button>
+      </p>
+      <p id="counter">Count: {counter.count}</p>
+    </div>
   );
 }
 
 export default App;
+
 
